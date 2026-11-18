@@ -81,27 +81,88 @@ class pm_payneteasy_sale extends pm_payneteasy_abstract
 
     public function checkTransaction($paymentParams, $order, $action)
     {
-        // payment has been checked in updatePaymentStatus() method
-        return array(1, '');
+        // The return URL can be opened by anyone: never trust it, ask the gateway.
+        $this->loadPaymentStatus($order);
+
+        if (empty($order->paynet_order_id))
+        {
+            return array(3, \JText::_('JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED'));
+        }
+
+        try
+        {
+            $response = $this
+                ->getPaymentAggregate($paymentParams)
+                ->updateStatus($order);
+        }
+        catch (Exception $e)
+        {
+            $this->logException($e);
+            $this->savePaymentStatus($order, true);
+
+            return array(0, \JText::_('JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED'));
+        }
+
+        $this->savePaymentStatus($order, true);
+
+        if ($response->isApproved())
+        {
+            return array(1, '');
+        }
+        elseif ($response->isProcessing())
+        {
+            return array(2, '');
+        }
+
+        return array(3, \JText::_('JSHOP_PAYNETEASY_PAYMENT_DECLINED'));
     }
 
     /**
      * Get labels for order saved data
      *
+     * Card fields are not listed, so they are never shown in the order.
+     *
      * @return      array       [<order_parameter_name>, <order_parameter_label>]
      */
     public function getDisplayNameParams()
     {
-        return array
-        (
-            'credit_card_owner'         => \JText::_('JSHOP_PAYNETEASY_CREDIT_CARD_OWNER'),
-            'credit_card_number'        => \JText::_('JSHOP_PAYNETEASY_CREDIT_CARD_NUMBER'),
-            'credit_card_expire_month'  => \JText::_('JSHOP_PAYNETEASY_CREDIT_CARD_EXPIRE_MONTH'),
-            'credit_card_expire_year'   => \JText::_('JSHOP_PAYNETEASY_CREDIT_CARD_EXPIRE_YEAR'),
-            'credit_card_cvv2'          => \JText::_('JSHOP_PAYNETEASY_CREDIT_CARD_CVV2')
-        );
+        return array();
     }
-    
+
+    /**
+     * {@inheritdoc}
+     *
+     * JoomShopping stores the payment form fields (card number, CVV) in the
+     * order. They are needed only for the sale request: erase them right after.
+     */
+    protected function startSale($paymentConfig, OrderTable $order)
+    {
+        try
+        {
+            return parent::startSale($paymentConfig, $order);
+        }
+        finally
+        {
+            $this->forgetCardData($order);
+        }
+    }
+
+    /**
+     * Remove card data saved with the order
+     *
+     * @param       OrderTable      $order      Joomla order
+     */
+    protected function forgetCardData(OrderTable $order)
+    {
+        $db = \Joomla\CMS\Factory::getDbo();
+        $query = $db->getQuery(true)
+            ->update($db->quoteName('#__jshopping_orders'))
+            ->set($db->quoteName('payment_params') . ' = ' . $db->quote(''))
+            ->set($db->quoteName('payment_params_data') . ' = ' . $db->quote(''))
+            ->where($db->quoteName('order_id') . ' = ' . (int) $order->order_id);
+        $db->setQuery($query)->execute();
+    }
+
     function getSavePaymentParams(){
         return true;
     }
