@@ -79,8 +79,40 @@ class pm_payneteasy_sale extends pm_payneteasy_abstract
 
     public function checkTransaction($paymentParams, $order, $action)
     {
-        // payment has been checked in updatePaymentStatus() method
-        return array(1, '');
+        // The return URL can be opened by anyone: never trust it, ask the gateway.
+        $this->loadPaymentStatus($order);
+
+        if (empty($order->paynet_order_id))
+        {
+            return array(3, _JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED);
+        }
+
+        try
+        {
+            $response = $this
+                ->getPaymentAggregate($paymentParams)
+                ->updateStatus($order);
+        }
+        catch (Exception $e)
+        {
+            $this->logException($e);
+            $this->savePaymentStatus($order, true);
+
+            return array(0, _JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED);
+        }
+
+        $this->savePaymentStatus($order, true);
+
+        if ($response->isApproved())
+        {
+            return array(1, '');
+        }
+        elseif ($response->isProcessing())
+        {
+            return array(2, '');
+        }
+
+        return array(3, _JSHOP_PAYNETEASY_PAYMENT_DECLINED);
     }
 
     /**
