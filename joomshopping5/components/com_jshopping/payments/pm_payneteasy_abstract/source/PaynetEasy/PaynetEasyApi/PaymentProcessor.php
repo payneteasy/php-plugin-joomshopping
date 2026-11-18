@@ -414,7 +414,7 @@ class PaymentProcessor
      *
      * @throws      Exception                                       Rethrowned exception, if has not self::HANDLER_CATCH_EXCEPTION
      */
-    protected function handleException(Exception $exception, PaymentTransaction $paymentTransaction, Response $response = null): void
+    protected function handleException(Exception $exception, PaymentTransaction $paymentTransaction, ?Response $response = null): void
     {
         $this->callHandler(self::HANDLER_SAVE_CHANGES, $paymentTransaction, $response);
 
