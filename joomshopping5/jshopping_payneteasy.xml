@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.9" type="file" method="upgrade">
+	<name>jshopping_payneteasy</name>
+	<author>Arefyev Maxim</author>
+	<creationDate>Dec 2023</creationDate>
+	<authorEmail>arefyvmaxim@yandex.ru</authorEmail>
+	<version>1.0.2</version>
+	<description>JSHOPPING_PAYNETEASY_DESCRIPTION</description>
+
+    <scriptfile>install.php</scriptfile>
+
+   <install>
+      <sql>
+         <file charset="utf8" driver="mysql">install.sql</file>
+      </sql>
+   </install>
+
+   <uninstall>
+      <sql>
+         <file charset="utf8" driver="mysql">uninstall.sql</file>
+      </sql>
+   </uninstall>
+
+    <fileset>
+        <files>
+            <folder>administrator</folder>
+            <folder>components</folder>
+        </files>
+    </fileset>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.files_jshopping_payneteasy.ini</language>
+        <language tag="en-GB">en-GB/en-GB.files_jshopping_payneteasy.sys.ini</language>
+    </languages>
+</extension>
