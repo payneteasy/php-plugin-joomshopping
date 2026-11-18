@@ -20,10 +20,17 @@
             "role": "developer"
         }
     ],
+    "repositories":
+    [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/payneteasy/php-library-payneteasy-api"
+        }
+    ],
     "minimum-stability": "dev",
     "require":
     {
-        "php":                                      ">=5.5.0",
+        "php":                                      ">=7.1.0",
         "payneteasy/php-library-payneteasy-api":    "~1.0"
     },
     "archive":

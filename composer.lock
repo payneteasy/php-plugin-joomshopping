@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
     ],
-    "hash": "091cc7b2cf6139b774c418915065e3b8",
+    "content-hash": "e29c2754c2787604a8c6308dd768526e",
     "packages": [
         {
             "name": "payneteasy/php-library-payneteasy-api",
@@ -11,18 +12,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/payneteasy/php-library-payneteasy-api.git",
-                "reference": "a8f2dccd60c0274e341cc48e8d4c734b42e6f070"
+                "reference": "1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payneteasy/php-library-payneteasy-api/zipball/a8f2dccd60c0274e341cc48e8d4c734b42e6f070",
-                "reference": "a8f2dccd60c0274e341cc48e8d4c734b42e6f070",
+                "url": "https://api.github.com/repos/payneteasy/php-library-payneteasy-api/zipball/1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7",
+                "reference": "1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3.0"
+                "php": ">=7.1.0"
             },
+            "require-dev": {
+                "phake/phake": "2.3.*",
+                "phpunit/phpunit": "4.7.*"
+            },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -34,7 +40,13 @@
                     "PaynetEasy\\PaynetEasyApi\\": "source/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "archive": {
+                "exclude": [
+                    "/doc",
+                    "/example",
+                    "/test"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -56,23 +68,22 @@
                 "payment",
                 "payneteasy"
             ],
-            "time": "2013-10-23 16:29:18"
+            "support": {
+                "source": "https://github.com/payneteasy/php-library-payneteasy-api/tree/master",
+                "issues": "https://github.com/payneteasy/php-library-payneteasy-api/issues"
+            },
+            "time": "2026-11-18T14:12:24+00:00"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0"
+        "php": ">=7.1.0"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
