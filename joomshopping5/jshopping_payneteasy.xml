@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.9" type="file" method="upgrade">
+	<name>jshopping_payneteasy</name>
+	<author>Arefyev Maxim</author>
+	<creationDate>Nov 2026</creationDate>
+	<authorEmail>arefyvmaxim@yandex.ru</authorEmail>
+	<version>2.0.0</version>
+	<description>JSHOPPING_PAYNETEASY_DESCRIPTION</description>
+
+   <install>
+      <sql>
+         <file charset="utf8" driver="mysql">install.sql</file>
+      </sql>
+   </install>
+
+   <uninstall>
+      <sql>
+         <file charset="utf8" driver="mysql">uninstall.sql</file>
+      </sql>
+   </uninstall>
+
+    <!-- Only the plugin's own folders. Without a target, uninstalling removed
+         the whole components (and administrator) folder of the site. -->
+    <fileset>
+        <files folder="components/com_jshopping/payments" target="components/com_jshopping/payments">
+            <folder>pm_payneteasy_abstract</folder>
+            <folder>pm_payneteasy_sale</folder>
+            <folder>pm_payneteasy_saleform</folder>
+        </files>
+    </fileset>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.files_jshopping_payneteasy.ini</language>
+        <language tag="en-GB">en-GB/en-GB.files_jshopping_payneteasy.sys.ini</language>
+    </languages>
+</extension>

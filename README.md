@@ -37,3 +37,9 @@
 * [Установка плагина](doc/00-installation.md)
 * [Настройка плагина](doc/01-configuration.md)
 * [Удаление плагина](doc/02-uninstalling.md)
+## Joomla 5 / JoomShopping 5
+
+The `joomshopping5` folder contains the version for Joomla 5 and JoomShopping 5
+(file extension `jshopping_payneteasy`). Install the `jshopping_payneteasy-*.zip`
+archive from the release in Joomla: System → Install → Extensions. Version 2.0.0
+installs over 1.0.2 as an update; payment method settings are kept.
