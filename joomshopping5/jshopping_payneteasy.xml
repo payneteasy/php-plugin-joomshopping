@@ -7,8 +7,6 @@
 	<version>1.0.2</version>
 	<description>JSHOPPING_PAYNETEASY_DESCRIPTION</description>
 
-    <scriptfile>install.php</scriptfile>
-
    <install>
       <sql>
          <file charset="utf8" driver="mysql">install.sql</file>
@@ -21,10 +19,13 @@
       </sql>
    </uninstall>
 
+    <!-- Only the plugin's own folders. Without a target, uninstalling removed
+         the whole components (and administrator) folder of the site. -->
     <fileset>
-        <files>
-            <folder>administrator</folder>
-            <folder>components</folder>
+        <files folder="components/com_jshopping/payments" target="components/com_jshopping/payments">
+            <folder>pm_payneteasy_abstract</folder>
+            <folder>pm_payneteasy_sale</folder>
+            <folder>pm_payneteasy_saleform</folder>
         </files>
     </fileset>
     <languages folder="language">
