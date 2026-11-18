@@ -161,6 +161,14 @@ abstract class pm_payneteasy_abstract extends PaymentRoot
     {
         $this->loadPaymentStatus($order);
 
+        // The customer return and the gateway callback both land here. Once the
+        // payment is approved, a later call must not change the order: the
+        // library rejects it as already finished, which used to cancel a paid order.
+        if ($order->transaction_status === 'approved')
+        {
+            return array(1, '');
+        }
+
         try
         {
             $response = $this->getPaymentAggregate($paymentParams)
@@ -171,7 +179,8 @@ abstract class pm_payneteasy_abstract extends PaymentRoot
             $this->logException($e);
             $this->savePaymentStatus($order, true);
 
-            return array(3, _JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED);
+            // An error is not a decline: leave the order status unchanged.
+            return array(0, _JSHOP_PAYNETEASY_PAYMENT_NOT_PASSED);
         }
 
         $this->savePaymentStatus($order, true);
