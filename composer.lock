@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e29c2754c2787604a8c6308dd768526e",
+    "content-hash": "191a6b5e33fed89171ef07e3ac566169",
     "packages": [
         {
             "name": "payneteasy/php-library-payneteasy-api",
-            "version": "dev-master",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payneteasy/php-library-payneteasy-api.git",
-                "reference": "1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7"
+                "reference": "d3880eee98e56a8e1a64ed96cc497d6d2eb53535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payneteasy/php-library-payneteasy-api/zipball/1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7",
-                "reference": "1501b4edf04c3edbb7e945ca4aca13c7e7b8b9d7",
+                "url": "https://api.github.com/repos/payneteasy/php-library-payneteasy-api/zipball/d3880eee98e56a8e1a64ed96cc497d6d2eb53535",
+                "reference": "d3880eee98e56a8e1a64ed96cc497d6d2eb53535",
                 "shasum": ""
             },
             "require": {
@@ -28,11 +28,10 @@
                 "phake/phake": "2.3.*",
                 "phpunit/phpunit": "4.7.*"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.0-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -69,17 +68,17 @@
                 "payneteasy"
             ],
             "support": {
-                "source": "https://github.com/payneteasy/php-library-payneteasy-api/tree/master",
+                "source": "https://github.com/payneteasy/php-library-payneteasy-api/tree/v1.1.1",
                 "issues": "https://github.com/payneteasy/php-library-payneteasy-api/issues"
             },
-            "time": "2026-11-18T14:12:24+00:00"
+            "time": "2026-11-23T14:44:43+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {},
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.1.0"
