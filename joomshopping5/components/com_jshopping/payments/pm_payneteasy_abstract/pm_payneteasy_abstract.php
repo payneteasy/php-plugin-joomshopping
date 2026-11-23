@@ -145,8 +145,10 @@ abstract class pm_payneteasy_abstract extends PaymentRoot
         return array
         (
             'order_id'          => $input->getInt('order_id', null),
-            'hash'              => '',
-            'checkHash'         => 0,
+            // The return and callback URLs carry the order hash: JoomShopping
+            // rejects a request for an order with another hash
+            'hash'              => $input->getString('hash', ''),
+            'checkHash'         => 1,
             'checkReturnParams' => 1
         );
     }
@@ -370,7 +372,7 @@ $paymentStatus = $db->loadObject();
      */
     protected function getReturnUrl(OrderTable $order)
     {
-        return $this->getActionUrl('return', $order->order_id);
+        return $this->getActionUrl('return', $order);
     }
 
     /**
@@ -390,7 +392,7 @@ $paymentStatus = $db->loadObject();
      */
     protected function cancelOrder(OrderTable $order)
     {
-        $this->redirect($this->getActionUrl('cancel', $order->order_id));
+        $this->redirect($this->getActionUrl('cancel', $order));
     }
 
     /**
@@ -400,7 +402,7 @@ $paymentStatus = $db->loadObject();
      */
     protected function finishOrder(OrderTable $order)
     {
-        $this->redirect($this->getActionUrl('return', $order->order_id));
+        $this->redirect($this->getActionUrl('return', $order));
     }
 
     /**
@@ -411,13 +413,16 @@ $paymentStatus = $db->loadObject();
     protected function showPaymentStatusUpdater(OrderTable $order)
     {
         \JFactory::getSession()->set('jshop_send_end_form', 0);
-        $formAction = $this->getActionUrl('', $order->order_id, 6) . '&payment_stage=status';
+        $formAction = $this->getActionUrl('', $order, 6) . '&payment_stage=status';
 
         require_once __DIR__ . '/status_form.php';
     }
 
-    protected function getActionUrl($action, $orderId, $step = 7)
+    protected function getActionUrl($action, $order, $step = 7)
     {
+        $orderId = (int) $order->order_id;
+        $hash    = urlencode((string) $order->order_hash);
+
         $host = JURI::getInstance()->toString(array("scheme",'host', 'port'));
 
         return $host . \JSHelper::SEFLink('index.php?option=com_jshopping&' .
@@ -425,7 +430,8 @@ $paymentStatus = $db->loadObject();
                                          "task=step{$step}&" .
                                          "act={$action}&" .
                                          "js_paymentclass={$this->getPaymentPluginClass()}&" .
-                                         "order_id={$orderId}");
+                                         "order_id={$orderId}&" .
+                                         "hash={$hash}");
     }
 
     /**

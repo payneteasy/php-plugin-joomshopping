@@ -156,7 +156,7 @@ abstract class AbstractCallback implements CallbackInterface
                 $propertyValue = PropertyAccessor::getValue($paymentTransaction, $propertyPath, false);
                 $callbackValue = $callbackResponse[$fieldName];
 
-                if ($propertyValue != $callbackValue)
+                if (!static::isEqualValue($propertyPath, $propertyValue, $callbackValue))
                 {
                     $unequalValues[] = "CallbackResponse field '{$fieldName}' value '{$callbackValue}' does not " .
                                        "equal PaymentTransaction property '{$propertyPath}' value '{$propertyValue}'";
@@ -200,6 +200,31 @@ abstract class AbstractCallback implements CallbackInterface
     }
 
     /**
+     * Compares a callback field with the transaction property.
+     * Amounts are compared as money (the gateway sends "100.00" for 100),
+     * other fields as strings (loose == treats e.g. "1e1" and "10" as equal).
+     *
+     * @param       string      $propertyPath       Transaction property path
+     * @param       mixed       $propertyValue      Transaction property value
+     * @param       mixed       $callbackValue      Callback field value
+     *
+     * @return      boolean
+     */
+    static protected function isEqualValue($propertyPath, $propertyValue, $callbackValue): bool
+    {
+        $callbackValue = trim((string) $callbackValue);
+
+        if (substr($propertyPath, -strlen('amount')) === 'amount')
+        {
+            return     is_numeric($propertyValue)
+                    && preg_match('/^\d+(\.\d{1,2})?$/', $callbackValue)
+                    && round((float) $propertyValue * 100) == round((float) $callbackValue * 100);
+        }
+
+        return (string) $propertyValue === $callbackValue;
+    }
+
+    /**
      * Validate callback response control code
      *
      * @param       PaymentTransaction      $paymentTransaction     Payment transaction for control code checking
@@ -219,10 +244,10 @@ abstract class AbstractCallback implements CallbackInterface
             $paymentTransaction->getQueryConfig()->getSigningKey()
         );
 
-        if($expectedControlCode !== $callbackResponse->getControlCode())
+        // Constant-time comparison; never disclose the expected control code
+        if(!hash_equals($expectedControlCode, (string) $callbackResponse->getControlCode()))
         {
-            throw new ValidationException("Actual control code '{$callbackResponse->getControlCode()}' does " .
-                                          "not equal expected '{$expectedControlCode}'");
+            throw new ValidationException('Invalid callback control code');
         }
     }
 }
