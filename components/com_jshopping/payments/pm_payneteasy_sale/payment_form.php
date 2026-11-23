@@ -12,7 +12,7 @@
                 class="inputbox"
                 name="params[pm_payneteasy_sale][credit_card_owner]"
                 id="params_pm_payneteasy_sale_credit_card_owner"
-                value="<?php print $params['credit_card_owner'] ?>"
+                value="<?php print htmlspecialchars(isset($params['credit_card_owner']) ? (string) $params['credit_card_owner'] : '', ENT_QUOTES, 'UTF-8') ?>"
             />
         </td>
     </tr>
@@ -26,7 +26,7 @@
                 class="inputbox"
                 name="params[pm_payneteasy_sale][credit_card_number]"
                 id="params_pm_payneteasy_sale_credit_card_number"
-                value="<?php print $params['credit_card_number'] ?>"
+                value="<?php print htmlspecialchars(isset($params['credit_card_number']) ? (string) $params['credit_card_number'] : '', ENT_QUOTES, 'UTF-8') ?>"
             />
         </td>
     </tr>
@@ -66,7 +66,7 @@
                 class="inputbox"
                 name="params[pm_payneteasy_sale][credit_card_cvv2]"
                 id="params_pm_payneteasy_sale_credit_card_cvv2"
-                value="<?php print $params['credit_card_cvv2'] ?>"
+                value="<?php print htmlspecialchars(isset($params['credit_card_cvv2']) ? (string) $params['credit_card_cvv2'] : '', ENT_QUOTES, 'UTF-8') ?>"
             />
         </td>
     </tr>
