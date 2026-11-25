@@ -46,6 +46,10 @@ class pm_payneteasy_sale extends pm_payneteasy_abstract
             $params = array_merge(static::$defaultCreditCardParams, $paymentFormParams);
         }
 
+        // The card number and the CVV are never printed back to the page
+        $params['credit_card_number'] = '';
+        $params['credit_card_cvv2']   = '';
+
         $paymentPluginClass = $this->getPaymentPluginClass();
         $startYear = (int) date("Y");
         $endYear   = $startYear + 10;
@@ -131,18 +135,15 @@ class pm_payneteasy_sale extends pm_payneteasy_abstract
      * {@inheritdoc}
      *
      * JoomShopping stores the payment form fields (card number, CVV) in the
-     * order. They are needed only for the sale request: erase them right after.
+     * order and in the session. The sale request reads them from the loaded
+     * order object, so the saved copies are erased before the request:
+     * on an error the request ends with a redirect and nothing runs after it.
      */
     protected function startSale($paymentConfig, jshopOrder $order)
     {
-        try
-        {
-            return parent::startSale($paymentConfig, $order);
-        }
-        finally
-        {
-            $this->forgetCardData($order);
-        }
+        $this->forgetCardData($order);
+
+        return parent::startSale($paymentConfig, $order);
     }
 
     /**
@@ -159,5 +160,8 @@ class pm_payneteasy_sale extends pm_payneteasy_abstract
             ->set($db->quoteName('payment_params_data') . ' = ' . $db->quote(''))
             ->where($db->quoteName('order_id') . ' = ' . (int) $order->order_id);
         $db->setQuery($query)->execute();
+
+        // The copy the checkout keeps to show the payment form again
+        JFactory::getSession()->set('pm_params', null);
     }
 }

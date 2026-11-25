@@ -264,7 +264,7 @@ class Payment extends Data
      */
     public function getAmountInCents()
     {
-        return (int) ($this->getAmount() * 100);
+        return (int) round($this->getAmount() * 100);
     }
 
     /**

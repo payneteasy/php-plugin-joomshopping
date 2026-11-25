@@ -424,7 +424,13 @@ abstract class pm_payneteasy_abstract extends PaymentRoot
      */
     protected function logException(Exception $exception)
     {
-        JLog::add($exception, JLog::ERROR);
+        // Validation messages quote the rejected value, which may be a card
+        // number or a CVV: the values and long digit runs are masked, no trace
+        $message = get_class($exception) . ': ' . $exception->getMessage();
+        $message = preg_replace("/Value '.*?' (does not|is not)/s", "Value '***' $1", $message);
+        $message = preg_replace('/\d{7,}/', '***', $message);
+
+        JLog::add($message, JLog::ERROR);
     }
 
     /**
