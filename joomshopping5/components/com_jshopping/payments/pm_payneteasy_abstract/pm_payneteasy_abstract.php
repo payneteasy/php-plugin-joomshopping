@@ -143,10 +143,11 @@ abstract class pm_payneteasy_abstract extends PaymentRoot
 
         return array
         (
-            'order_id'          => $input->getInt('order_id', null),
+            // Array values (order_id[]=1, hash[]=x) are ignored
+            'order_id'          => is_scalar($orderId = $input->getInt('order_id', null)) ? $orderId : null,
             // The return and callback URLs carry the order hash: JoomShopping
             // rejects a request for an order with another hash
-            'hash'              => $input->getString('hash', ''),
+            'hash'              => is_scalar($hash = $input->getString('hash', '')) ? $hash : '',
             'checkHash'         => 1,
             'checkReturnParams' => 1
         );

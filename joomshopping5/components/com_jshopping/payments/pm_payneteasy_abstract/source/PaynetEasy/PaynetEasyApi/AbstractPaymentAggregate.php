@@ -5,6 +5,7 @@ namespace PaynetEasy\PaynetEasyApi;
 use PaynetEasy\PaynetEasyApi\PaymentData\PaymentTransaction;
 use PaynetEasy\PaynetEasyApi\PaymentProcessor;
 use PaynetEasy\PaynetEasyApi\Transport\CallbackResponse;
+use PaynetEasy\PaynetEasyApi\Exception\ValidationException;
 use PaynetEasy\PaynetEasyApi\Util\Validator;
 use PaynetEasy\PaynetEasyApi\Util\RegionFinder;
 
@@ -43,7 +44,7 @@ abstract class AbstractPaymentAggregate
     {
         if (empty($this->initialApiMethod))
         {
-            throw new RuntimeException('Initial API method can not be empty');
+            throw new \RuntimeException('Initial API method can not be empty');
         }
 
         $this->paymentConfig    = $paymentConfig;
@@ -68,7 +69,7 @@ abstract class AbstractPaymentAggregate
         {
             $response = $this->paymentProcessor
                 ->executeQuery($this->initialApiMethod, $paynetTransaction);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
         }
         // finally
@@ -98,10 +99,15 @@ abstract class AbstractPaymentAggregate
         {
             $callbackResponse = $this->paymentProcessor
                 ->processCustomerReturn(new CallbackResponse($callbackData), $paynetTransaction);
-        } catch (Exception $e) {}
+        } catch (\Exception $e) {}
         // finally
         {
-            $this->updateOrder($joomlaOrder, $paynetTransaction);
+            // Data that did not pass the validation (no gateway signature, wrong order)
+            // says nothing about the payment: the stored payment state is not changed
+            if (!isset($e) || !($e instanceof ValidationException))
+            {
+                $this->updateOrder($joomlaOrder, $paynetTransaction);
+            }
             if (isset($e)) {throw $e;}
         }
 
@@ -128,7 +134,7 @@ abstract class AbstractPaymentAggregate
         {
             $response = $this->paymentProcessor
                 ->executeQuery('status', $paynetTransaction);
-        } catch (Exception $e) {}
+        } catch (\Exception $e) {}
         // finally
         {
             $this->updateOrder($joomlaOrder, $paynetTransaction);
