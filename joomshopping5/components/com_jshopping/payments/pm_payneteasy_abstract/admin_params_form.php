@@ -13,7 +13,7 @@
                         class="inputbox"
                         name="pm_params[end_point]"
                         size="45"
-                        value="<?php print $params['end_point'] ?>"
+                        value="<?php print htmlspecialchars((string) ($params['end_point'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                     />
                     <?php print JHTML::tooltip(\JText::_('JSHOP_PAYNETEASY_END_POINT_DESCRIPTION')); ?>
                 </td>
@@ -28,7 +28,7 @@
                         class="inputbox"
                         name="pm_params[login]"
                         size="45"
-                        value="<?php print $params['login'] ?>"
+                        value="<?php print htmlspecialchars((string) ($params['login'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                     />
                     <?php print JHTML::tooltip(\JText::_('JSHOP_PAYNETEASY_LOGIN_DESCRIPTION')); ?>
                 </td>
@@ -43,7 +43,7 @@
                         class="inputbox"
                         name="pm_params[signing_key]"
                         size="45"
-                        value="<?php print $params['signing_key'] ?>"
+                        value="<?php print htmlspecialchars((string) ($params['signing_key'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                     />
                     <?php print JHTML::tooltip(\JText::_('JSHOP_PAYNETEASY_SIGNING_KEY_DESCRIPTION')); ?>
                 </td>
@@ -58,7 +58,7 @@
                         class="inputbox"
                         name="pm_params[sandbox_gateway]"
                         size="45"
-                        value="<?php print $params['sandbox_gateway'] ?>"
+                        value="<?php print htmlspecialchars((string) ($params['sandbox_gateway'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                     />
                     <?php print JHTML::tooltip(JText::_('JSHOP_PAYNETEASY_SANDBOX_GATEWAY_DESCRIPTION')); ?>
                 </td>
@@ -73,7 +73,7 @@
                         class="inputbox"
                         name="pm_params[production_gateway]"
                         size="45"
-                        value="<?php print $params['production_gateway'] ?>"
+                        value="<?php print htmlspecialchars((string) ($params['production_gateway'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                     />
                     <?php print JHTML::tooltip(\JText::_('JSHOP_PAYNETEASY_PRODUCTION_GATEWAY_DESCRIPTION')); ?>
                 </td>
